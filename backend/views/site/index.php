@@ -25,8 +25,10 @@ $this->title = 'Admin Secure Area';
                 <br>
                 <a href="admin/site/showtime?id=<?= $show->id ?>">[Edit Show]</a>
                 <a href="admin/site/delshow?id=<?= $show->id ?>">[Delete Show]</a>
+                --
                 <a href="admin/site/viewmovie?id=<?= $show->movie_id ?>">[View Movie]</a>
                 <a href="admin/site/movie?id=<?= $show->movie_id ?>">[Edit Movie]</a>
+                <a href="admin/site/delmovie?id=<?= $show->movie_id ?>">[Delete Movie]</a>
             </div>
             <div class="panel-body">
                 <span style="float: right">Show time: <?= $show->time . ":00" ?></span>

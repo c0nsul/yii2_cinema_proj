@@ -9,7 +9,6 @@ use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -26,19 +25,17 @@ class SiteController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['logout'],
 				'rules' => [
 					[
-						'actions' => ['logout'],
+						'actions' => ['login'],
+						'allow' => true,
+						'roles' => ['?'],
+					],
+					[
+						'actions' => [],
 						'allow' => true,
 						'roles' => ['@'],
 					],
-				],
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'logout' => ['post'],
 				],
 			],
 		];
@@ -67,9 +64,6 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		if (Yii::$app->user->isGuest) {
-			return Yii::$app->getResponse()->redirect('admin/site/login');
-		}
 
 		$model = new Showtime();
 		$shows = $model->find()
@@ -114,7 +108,7 @@ class SiteController extends Controller
 	{
 		Yii::$app->user->logout();
 
-		return $this->goHome();
+		return Yii::$app->getResponse()->redirect('/admin/site/login');
 	}
 
 	/**
@@ -211,5 +205,21 @@ class SiteController extends Controller
 		}
 		return Yii::$app->getResponse()->redirect('/admin');
 	}
+
+	public function actionDelmovie($id)
+	{
+
+		if (!empty($id)) {
+			//delete movie
+			$model = Movie::findOne($id);
+			$model->delete();
+
+			//delete related Shows
+			Showtime::deleteAll(['movie_id' => $id]);
+
+		}
+		return Yii::$app->getResponse()->redirect('/admin');
+	}
+
 
 }
