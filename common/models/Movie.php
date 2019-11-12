@@ -48,9 +48,8 @@ class Movie extends ActiveRecord
 			['age', 'integer'],
 			['playtime', 'required'],
 			['playtime', 'integer'],
-			['photo', 'required', 'on' => 'upload'],
 			[
-				'photo',
+				['photo'],
 				'file',
 				'extensions' => 'jpg, png',
 				'skipOnEmpty' => false,

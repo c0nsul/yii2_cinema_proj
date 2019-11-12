@@ -126,6 +126,7 @@ class SiteController extends Controller
 		}
 
 		if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
 			$model->photo = UploadedFile::getInstance($model, 'photo');
 			//new
 			if (($model->photo) && $model->upload()) {
@@ -212,10 +213,14 @@ class SiteController extends Controller
 		if (!empty($id)) {
 			//delete movie
 			$model = Movie::findOne($id);
+			$nameImg = $model->photo;
 			$model->delete();
 
 			//delete related Shows
 			Showtime::deleteAll(['movie_id' => $id]);
+
+			//delete images
+			unlink('uploads/'.$nameImg);
 
 		}
 		return Yii::$app->getResponse()->redirect('/admin');

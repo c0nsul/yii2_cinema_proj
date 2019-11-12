@@ -25,8 +25,10 @@ class Showtime extends ActiveRecord
 		return array(
 			['movie_id', 'required'],
 			['time', 'required'],
+			['time', 'integer'],
 			['date', 'required'],
 			['price', 'required'],
+			['price', 'integer'],
 		);
 	}
 
