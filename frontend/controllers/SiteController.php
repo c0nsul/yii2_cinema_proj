@@ -68,7 +68,7 @@ class SiteController extends Controller
 	{
 		$model = new Showtime();
 		$shows = $model->find()
-			->orderBy(['date' => SORT_ASC, 'time' => SORT_ASC])
+			->orderBy(['date' => SORT_DESC, 'time' => SORT_DESC])
 			->joinWith('movie')
 			->all();
 

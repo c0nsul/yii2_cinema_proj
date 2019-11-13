@@ -70,7 +70,7 @@ class SiteController extends Controller
 		//showtime listing
 		$model = new Showtime();
 		$shows = $model->find()
-			->orderBy(['date' => SORT_ASC, 'time' => SORT_ASC])
+			->orderBy(['date' => SORT_DESC, 'time' => SORT_DESC])
 			->joinWith('movie')
 			->all();
 
@@ -152,7 +152,7 @@ class SiteController extends Controller
 				// file is uploaded successfully
 				if ($model->save(true)) {
 					//del old img
-					if ($oldPhoto && $oldPhoto != Movie::EMPTYIMG) {
+					if (!empty($oldPhoto) && $oldPhoto != Movie::EMPTYIMG) {
 						unlink('uploads/' . $oldPhoto);
 					}
 					return Yii::$app->getResponse()->redirect('/admin');
