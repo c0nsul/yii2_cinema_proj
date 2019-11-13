@@ -24,17 +24,17 @@ class m130524_201442_init extends Migration
 			'updated_at' => $this->integer()->notNull(),
 		], $tableOptions);
 
-		//кино
+		//movies
 		$this->createTable('{{%movie}}', [
 			'id' => $this->primaryKey(),
 			'moviename' => $this->string()->notNull()->unique(),
-			'desc' => $this->string()->notNull(),
+			'desc' => $this->text()->notNull(),
 			'age' => $this->string()->notNull(),
 			'playtime' => $this->string()->notNull(),
 			'photo' => $this->string(),
 		], $tableOptions);
 
-		//сеанс
+		//showtime
 		$this->createTable('{{%showtime}}', [
 			'id' => $this->primaryKey(),
 			'movie_id' => $this->Integer()->notNull(),

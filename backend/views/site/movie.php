@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 
 	$type = 'Update';
 	if ($model->photo) {
-		$oldImg = "Poser: <img  width='250px' src='/admin/uploads/{$model->photo}'>";
+		$oldImg = "<img  width='250px' src='/admin/uploads/{$model->photo}'>";
 	} else {
 		$oldImg = null;
 	}
@@ -53,7 +53,8 @@ echo $form->field($model, 'age')->dropDownList($parameters, ['prompt' => 'Select
 <?= $oldImg ?>
     <br><br>
     <div class="form-group">
-		<?= Html::submitButton($type, ['class' => 'btn btn-primary']) ?>
+		<?= Html::submitButton($type, ['class' => 'btn btn-danger']) ?>
+		<?= Html::a('Back', Yii::$app->request->referrer, ['class' => 'btn btn-primary']) ?>
     </div>
 
 <?php ActiveForm::end(); ?>

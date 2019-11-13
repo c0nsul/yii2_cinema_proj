@@ -11,5 +11,5 @@ Name: <?= $model->moviename ?></br></br>
 Description: <?= $model->desc ?></br></br>
 Age: <?= $model->age ?>+</br></br>
 Lenght: <?= $model->playtime ?> min</br></br>
-Poster: <img width="250px" src="../uploads/<?= $model->photo ?>">
+<img width="250px" src="../uploads/<?= $model->photo ?>">
 

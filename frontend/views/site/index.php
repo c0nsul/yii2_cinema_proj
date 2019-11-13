@@ -25,7 +25,7 @@ $this->title = 'My Yii Application';
                 Lenght: <?= $show->movie->playtime ?> min
             </div>
             <div class="panel-body">
-                Poster: <img width="250px" src="/admin/uploads/<?= $show->movie->photo ?>">
+                <img width="250px" src="/admin/uploads/<?= $show->movie->photo ?>">
             </div>
         </div>
 	<?php endforeach; ?>

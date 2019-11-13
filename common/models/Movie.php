@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 
 class Movie extends ActiveRecord
 {
+	const EMPTYIMG = 'empty.jpg';
 
 	/**
 	 * {@inheritdoc}
@@ -52,7 +53,7 @@ class Movie extends ActiveRecord
 				['photo'],
 				'file',
 				'extensions' => 'jpg, png',
-				'skipOnEmpty' => false,
+				'skipOnEmpty' => true,
 				'maxSize' => 2000000,
 				'minSize' => 5000,
 				'on' => 'upload',

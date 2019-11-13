@@ -64,16 +64,32 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+		//movies counter
+		$movieCounter = Movie::find()->count();
 
+		//showtime listing
 		$model = new Showtime();
 		$shows = $model->find()
 			->orderBy(['date' => SORT_ASC, 'time' => SORT_ASC])
 			->joinWith('movie')
 			->all();
 
-		return $this->render('index', ['shows' => $shows]);
+		return $this->render('index', ['shows' => $shows, 'movieCounter' => $movieCounter]);
 	}
 
+	/**
+	 * display movies list
+	 *
+	 * @return string
+	 */
+	public function actionMovielist()
+	{
+
+		$model = new Movie();
+		$movies = $model->find()->all();
+
+		return $this->render('movielist', ['movies' => $movies]);
+	}
 
 	/**
 	 * Login action.
@@ -82,7 +98,6 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
-
 		if (!Yii::$app->user->isGuest) {
 			return $this->goHome();
 		}
@@ -112,6 +127,8 @@ class SiteController extends Controller
 	}
 
 	/**
+	 * FAT movie action
+	 *
 	 * @return string|\yii\console\Response|Response
 	 */
 	public function actionMovie($id = null)
@@ -125,28 +142,50 @@ class SiteController extends Controller
 			$model = new Movie();
 		}
 
-		if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
+		//post
+		if ($model->load(Yii::$app->request->post())) {
+			//upload?
 			$model->photo = UploadedFile::getInstance($model, 'photo');
 			//new
 			if (($model->photo) && $model->upload()) {
+				//YES
 				// file is uploaded successfully
 				if ($model->save(true)) {
+					//del old img
+					if ($oldPhoto && $oldPhoto != Movie::EMPTYIMG) {
+						unlink('uploads/' . $oldPhoto);
+					}
 					return Yii::$app->getResponse()->redirect('/admin');
 				} else {
 					return $this->render('movie', ['model' => $model]);
 				}
 			} else {
-				//update
+				//no upload
+				//update ?
 				if ($model->id) {
+					//YES
 					if ($oldPhoto) {
 						$model->photo = $oldPhoto;
 					}
 					$model->update();
 					return Yii::$app->getResponse()->redirect('/admin');
+				} else {
+					//no
+					//creation with empty img
+					$model->photo = Movie::EMPTYIMG;
+					if ($model->save(true)) {
+						return Yii::$app->getResponse()->redirect('/admin');
+					} else {
+						return $this->render('movie', ['model' => $model]);
+					}
 				}
 			}
 		}
+
+		if ($model->hasErrors()) {
+			var_dump($model->hasErrors());
+		}
+
 		return $this->render('movie', ['model' => $model]);
 	}
 
@@ -199,7 +238,6 @@ class SiteController extends Controller
 	 */
 	public function actionDelshow($id)
 	{
-
 		if (!empty($id)) {
 			$model = Showtime::findOne($id);
 			$model->delete();
@@ -207,9 +245,16 @@ class SiteController extends Controller
 		return Yii::$app->getResponse()->redirect('/admin');
 	}
 
+	/**
+	 * Deleting movie
+	 *
+	 * @param $id
+	 * @return \yii\console\Response|Response
+	 * @throws StaleObjectException
+	 * @throws Throwable
+	 */
 	public function actionDelmovie($id)
 	{
-
 		if (!empty($id)) {
 			//delete movie
 			$model = Movie::findOne($id);
@@ -220,11 +265,10 @@ class SiteController extends Controller
 			Showtime::deleteAll(['movie_id' => $id]);
 
 			//delete images
-			unlink('uploads/'.$nameImg);
-
+			if ($nameImg && ($nameImg != Movie::EMPTYIMG)) {
+				unlink('uploads/' . $nameImg);
+			}
 		}
 		return Yii::$app->getResponse()->redirect('/admin');
 	}
-
-
 }

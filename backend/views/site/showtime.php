@@ -47,7 +47,8 @@ echo $form->field($model, 'time')->dropdownList($parameters, ['prompt' => 'Selec
 
 <?= $form->field($model, 'price') ?>
     <div class="form-group">
-		<?= Html::submitButton($type, ['class' => 'btn btn-primary']) ?>
+		<?= Html::submitButton($type, ['class' => 'btn btn-danger']) ?>
+		<?= \yii\helpers\Html::a( 'Back', Yii::$app->request->referrer, ['class' => 'btn btn-primary']) ?>
     </div>
 
 <?php ActiveForm::end(); ?>
