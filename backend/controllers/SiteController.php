@@ -151,6 +151,7 @@ class SiteController extends Controller
 				//YES
 				// file is uploaded successfully
 				if ($model->save(true)) {
+					Yii::$app->session->setFlash('success', "Movie created!");
 					//del old img
 					if (!empty($oldPhoto) && $oldPhoto != Movie::EMPTYIMG) {
 						unlink('uploads/' . $oldPhoto);
@@ -168,12 +169,14 @@ class SiteController extends Controller
 						$model->photo = $oldPhoto;
 					}
 					$model->update();
+					Yii::$app->session->setFlash('success', "Movie updated!");
 					return Yii::$app->getResponse()->redirect('/admin');
 				} else {
 					//no
 					//creation with empty img
 					$model->photo = Movie::EMPTYIMG;
 					if ($model->save(true)) {
+						Yii::$app->session->setFlash('success', "Movie created!");
 						return Yii::$app->getResponse()->redirect('/admin');
 					} else {
 						return $this->render('movie', ['model' => $model]);
@@ -196,8 +199,10 @@ class SiteController extends Controller
 	{
 		if (!empty($id)) {
 			$model = Showtime::findOne($id);
+			$showStatus = ' updated';
 		} else {
 			$model = new Showtime();
+			$showStatus = ' created';
 		}
 
 		if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -207,6 +212,7 @@ class SiteController extends Controller
 			}
 
 			if ($model->save(true)) {
+				Yii::$app->session->setFlash('success', "Showtime " . $showStatus);
 				return Yii::$app->getResponse()->redirect('/admin');
 			} else {
 				return $this->render('showtime', ['model' => $model]);
@@ -241,6 +247,7 @@ class SiteController extends Controller
 		if (!empty($id)) {
 			$model = Showtime::findOne($id);
 			$model->delete();
+			Yii::$app->session->setFlash('success', "Showtime deleted!");
 		}
 		return Yii::$app->getResponse()->redirect('/admin');
 	}
@@ -268,6 +275,7 @@ class SiteController extends Controller
 			if ($nameImg && ($nameImg != Movie::EMPTYIMG)) {
 				unlink('uploads/' . $nameImg);
 			}
+			Yii::$app->session->setFlash('success', "Movie and related showtimes are deleted!");
 		}
 		return Yii::$app->getResponse()->redirect('/admin');
 	}
